@@ -1,0 +1,46 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div class="post">
+    <div>
+      <a href="/"> Go Back </a>
+    </div>
+    <hr>
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+  </div>
+
+  {{ form.open({url: '/post/'+post.id, method: 'POST' }) }}
+  {% if old('errors') %}
+    <div class="alert alert-danger">
+      {% for error in old('errors') %}
+        <li> {{ error.message }} </li>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {{ csrfField }}
+
+  <fieldset class="form-group">
+    {{ form.label('Comment Username') }}
+    {{ form.text('username', old('username'), { class: 'form-control' }) }}
+  </fieldset>
+
+  <fieldset class="form-group">
+    {{ form.label('Comment Text') }}
+    {{ form.textarea('comment', old('comment'), { class: 'form-control' }) }}
+  </fieldset>
+
+  {{ form.submit('Publish', 'publish', { class: 'btn btn-primary btn-block' }) }}
+
+  {{ form.close() }}
+  <div class="posts-wrapper">
+    {% for comment in comments %}
+      <div class="post">
+        <h2><a> {{ comment.username }} </a></h2>
+        <p> {{ comment.comment }} </p>
+      </div>
+    {% else %}
+      <h2> No Comment found </h2>
+    {% endfor %}
+  </div>
+{% endblock %}
